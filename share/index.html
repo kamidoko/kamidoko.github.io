@@ -133,7 +133,7 @@
     </div>
     <h1 id="title">招待を読み込んでいます…</h1>
     <p class="sub" id="sub">少しお待ちください</p>
-    <a id="open" class="btn" style="display:none">アプリで開く</a>
+    <a id="open" class="btn" style="display:none">アプリで開きます</a>
     <p class="spinner" id="spinner" style="display:none">アプリを開いています…</p>
     <p class="error" id="error" style="display:none"></p>
     <div class="fallback">
@@ -224,7 +224,7 @@
   // 2026-06-21: App Store fallback は最初から表示するようにしたので、ここでは
   // 「自動転送が効かなかった場合の追加アナウンス」だけスピナーに差し替える。
   setTimeout(function() {
-    spinnerEl.textContent = '自動で開かないときは、上のボタンを押してみてください。';
+    spinnerEl.textContent = '自動で開かないので、上のボタンを押してみてください。';
   }, 2400);
 })();
 </script>
