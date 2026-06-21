@@ -60,11 +60,6 @@
     color: #F0592B;
     word-break: break-word;
   }
-  .sub {
-    color: #9B8E7D;
-    font-size: 14px;
-    margin: 0 0 26px;
-  }
   .btn {
     display: inline-block;
     background: #F0592B;
@@ -78,11 +73,6 @@
     box-sizing: border-box;
   }
   .btn:active { opacity: 0.85; }
-  .spinner {
-    color: #9B8E7D;
-    font-size: 13px;
-    margin: 18px 0 0;
-  }
   .fallback {
     margin-top: 26px;
     padding-top: 22px;
@@ -132,9 +122,7 @@
       <img class="applogo" src="applogo.png" alt="紙マップでどこ？" height="56">
     </div>
     <h1 id="title">招待を読み込んでいます…</h1>
-    <p class="sub" id="sub">少しお待ちください</p>
-    <a id="open" class="btn" style="display:none">アプリで開きます</a>
-    <p class="spinner" id="spinner" style="display:none">アプリを開いています…</p>
+    <a id="open" class="btn" style="display:none">共有マップを開く</a>
     <p class="error" id="error" style="display:none"></p>
     <div class="fallback">
       <img class="install-icon" src="app-icon.png" alt="紙マップでどこ？ アイコン" width="56" height="56">
@@ -186,14 +174,11 @@
   var mapName = params.n;
 
   var titleEl = document.getElementById('title');
-  var subEl = document.getElementById('sub');
   var openEl = document.getElementById('open');
-  var spinnerEl = document.getElementById('spinner');
   var errorEl = document.getElementById('error');
 
   if (!icloudURL) {
     titleEl.textContent = 'リンクが正しくありません';
-    subEl.style.display = 'none';
     errorEl.textContent = '招待リンクの内容が読み取れませんでした。送信元に再送をお願いしてください。';
     errorEl.style.display = 'block';
     return;
@@ -206,7 +191,6 @@
   } else {
     titleEl.textContent = '紙どこに招待されました';
   }
-  subEl.textContent = '共有マップに参加します';
 
   // kamidoko-app://share?u=<icloud-url> を組み立てる。custom scheme は LINE/Safari の
   // WebView を OS-level URL handler 経路へ脱出させるための鍵。
@@ -214,18 +198,11 @@
 
   openEl.href = schemeURL;
   openEl.style.display = 'inline-block';
-  spinnerEl.style.display = 'block';
 
   // 一瞬タイトル/マップ名を視認させてから自動転送（タップ不要）。600ms ≒ 認知できる短さ。
   setTimeout(function() {
     location.replace(schemeURL);
   }, 600);
-
-  // 2026-06-21: App Store fallback は最初から表示するようにしたので、ここでは
-  // 「自動転送が効かなかった場合の追加アナウンス」だけスピナーに差し替える。
-  setTimeout(function() {
-    spinnerEl.textContent = '参加するには、上のボタンを押してください。';
-  }, 2400);
 })();
 </script>
 </body>
