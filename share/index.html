@@ -33,22 +33,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
   }
-  .app-icon {
-    width: 76px;
-    height: 76px;
-    border-radius: 17px;  /* iOS 風 squircle 近似 */
-    box-shadow: 0 2px 8px rgba(74, 58, 44, 0.15);
+  .applogo {
+    /* AppLogo.png は 478×185 (≒ 2.58:1)。height 基準で見やすいサイズに固定。 */
+    height: 56px;
+    width: auto;
     display: block;
   }
-  .logo {
-    font-size: 15px;
-    font-weight: 700;
-    color: #F0592B;
-    letter-spacing: 0.12em;
-    margin: 0;
+  /* fallback セクション内のアプリアイコン (App Store バッジの上に小さく置く) */
+  .install-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 13px;  /* iOS squircle 近似 (76→17 と同比) */
+    box-shadow: 0 2px 8px rgba(74, 58, 44, 0.15);
+    display: block;
+    margin: 0 auto 14px;
   }
   h1 {
     font-size: 21px;
@@ -129,8 +129,7 @@
 <body>
   <div class="card">
     <div class="brand">
-      <img class="app-icon" src="app-icon.png" alt="紙どこ アプリアイコン" width="76" height="76">
-      <p class="logo">紙マップでどこ？</p>
+      <img class="applogo" src="applogo.png" alt="紙マップでどこ？" height="56">
     </div>
     <h1 id="title">招待を読み込んでいます…</h1>
     <p class="sub" id="sub">少しお待ちください</p>
@@ -142,6 +141,7 @@
         アプリがインストールされていない場合は<br>
         下のボタンからインストールしてください。
       </p>
+      <img class="install-icon" src="app-icon.png" alt="紙マップでどこ？ アイコン" width="56" height="56">
       <a href="https://apps.apple.com/jp/app/kamidoko" aria-label="App Store からダウンロード">
         <img class="appstore-badge" src="appstore-badge-ja.svg" alt="App Store からダウンロード" height="48">
       </a>
