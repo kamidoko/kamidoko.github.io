@@ -195,7 +195,7 @@ A. iPhone のコンパスは周辺の磁気の影響を受けやすいです。�
 ## <span id="links">🔗 関連リンク</span>
 
 - [プライバシーポリシー]({{ site.baseurl }}/privacy.html)
-- [App Store ページ](https://apps.apple.com/jp/app/id6XXXXXXXXX) <small>（公開後に更新）</small>
+- [App Store ページ](https://apps.apple.com/jp/app/id6779239045)
 
 ---
 

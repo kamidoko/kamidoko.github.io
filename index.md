@@ -110,7 +110,7 @@ title: 紙マップでどこ？
 
 <div class="appstore-card" markdown="1">
 
-App Store ページ（公開後にリンクを掲載予定）
+[App Store でダウンロード](https://apps.apple.com/jp/app/id6779239045)
 
 </div>
 
