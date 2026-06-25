@@ -5,33 +5,33 @@ title: 紙マップでどこ？
 
 <div class="landing-page" markdown="1">
 
-<section class="landing-hero" markdown="1">
-  <div class="hero-copy" markdown="1">
-    <img src="{{ site.baseurl }}/assets/img/applogo.png" alt="紙マップでどこ？" class="hero-logo">
+<section class="landing-hero">
+<div class="hero-copy">
+<img src="{{ site.baseurl }}/assets/img/applogo.png" alt="紙マップでどこ？" class="hero-logo">
 
-    <h1>紙マップでどこ？</h1>
+<h1>紙マップでどこ？</h1>
 
-    <p class="hero-tagline">紙マップに、GPSで「いまここ」。<br>家族の場所も、ひと目でわかる。</p>
+<p class="hero-tagline">紙マップに、GPSで「いまここ」。<br>家族の場所も、ひと目でわかる。</p>
 
-    <p class="hero-lead">入口でもらった園内マップ、観光パンフレット、キャンプ場の案内図。紙の見やすさはそのままに、iPhone の現在地・進行方向・目印を重ねて歩けます。</p>
+<p class="hero-lead">入口でもらった園内マップ、観光パンフレット、キャンプ場の案内図。紙の見やすさはそのままに、iPhone の現在地・進行方向・目印を重ねて歩けます。</p>
 
-    <div class="hero-actions">
-      <a href="https://apps.apple.com/jp/app/id6779239045" class="appstore-link hero-store">
-        <img src="{{ site.baseurl }}/assets/img/appstore-badge-ja.svg" alt="App Store でダウンロード" class="appstore-badge">
-      </a>
-      <a href="#how-to-use" class="secondary-link">使い方を見る</a>
-    </div>
+<div class="hero-actions">
+<a href="https://apps.apple.com/jp/app/id6779239045" class="appstore-link hero-store">
+<img src="{{ site.baseurl }}/assets/img/appstore-badge-ja.svg" alt="App Store でダウンロード" class="appstore-badge">
+</a>
+<a href="#how-to-use" class="secondary-link">使い方を見る</a>
+</div>
 
-    <div class="hero-points" aria-label="主な特徴">
-      <span>マップ作成・現在地表示は無料</span>
-      <span>共有参加は無料</span>
-      <span>現在地表示は通信なしでも動作</span>
-    </div>
-  </div>
+<div class="hero-points" aria-label="主な特徴">
+<span>マップ作成・現在地表示は無料</span>
+<span>共有参加は無料</span>
+<span>現在地表示は通信なしでも動作</span>
+</div>
+</div>
 
-  <div class="hero-visual" markdown="1">
-    <img src="{{ site.baseurl }}/assets/img/paywall-hero.jpg" alt="紙マップとiPhoneの上に現在地ピンが表示されるイラスト">
-  </div>
+<div class="hero-visual">
+<img src="{{ site.baseurl }}/assets/img/paywall-hero.jpg" alt="紙マップとiPhoneの上に現在地ピンが表示されるイラスト">
+</div>
 </section>
 
 <section class="problem-band" markdown="1">
