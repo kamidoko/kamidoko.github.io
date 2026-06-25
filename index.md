@@ -5,10 +5,12 @@ title: 紙マップでどこ？
 
 <div class="hero-card" markdown="1">
 
-# 紙マップでどこ？
+<img src="{{ site.baseurl }}/assets/img/applogo.png" alt="紙マップでどこ？" class="hero-logo">
 
 絵地図・案内図・観光パンフレットの地図を写真で撮るだけで、
 **現在地が動く・道がわかる** iOS アプリです。
+
+<img src="{{ site.baseurl }}/assets/img/library-header.png" alt="" class="hero-illust">
 
 </div>
 
@@ -56,15 +58,21 @@ title: 紙マップでどこ？
 
 ## 使い方は 3 ステップ
 
+<div class="step-grid" markdown="1">
+
 <div class="step-card" markdown="1">
 
+<img src="{{ site.baseurl }}/assets/img/paywall-hero.png" alt="" class="step-illust">
+
 ### 1️⃣ 地図を取り込む
-カメラで撮影、または写真ライブラリ・PDF から選んで、地図を取り込みます。
-紙はなるべく平らに、**真上から** 撮るのが精度のコツ。
+カメラで撮影、または写真ライブラリ・PDF から選んで、紙の地図を取り込みます。
+紙はなるべく平らに、**真上から** 撮るのがコツ。
 
 </div>
 
 <div class="step-card" markdown="1">
+
+<img src="{{ site.baseurl }}/assets/img/calib-tips-hero.png" alt="" class="step-illust">
 
 ### 2️⃣ 位置合わせ（3 点）
 現地で、地図上の分かりやすい目印（入り口・交差点・特徴的な建物など）を 3 箇所以上タップ。
@@ -74,9 +82,13 @@ title: 紙マップでどこ？
 
 <div class="step-card" markdown="1">
 
-### 3️⃣ 現在地が表示されます
-歩くたびに現在地が動き、コンパスが方向を示します。
+<img src="{{ site.baseurl }}/assets/img/compass.png" alt="" class="step-illust step-illust-small">
+
+### 3️⃣ 現在地が動きます
+歩くたびに地図上の現在地が動き、コンパスが進行方向を示します。
 位置合わせ点を増やすほど精度が上がります。
+
+</div>
 
 </div>
 
@@ -84,19 +96,59 @@ title: 紙マップでどこ？
 
 ## 主な機能
 
-- 📷 **写真・PDF からの地図取り込み**　カメラ撮影、写真ライブラリ、ファイルアプリのいずれにも対応
-- 📍 **高度な位置合わせ**　相似変換／アフィン／射影変換／TPS（薄板スプライン）を地図に合わせて自動選択
-- ⭐ **目印ピン**　目的地・お気に入り・注意ポイントを 3 種類のピンで管理
-- 👥 **iCloud で共有**　家族・友人と地図と現在地をリアルタイムで共有
-- 🔋 **電池節約**　送信間隔を細かく調整可能
-- 🧭 **コンパス対応**　地図の向きに合わせて方位を表示
+<div class="feature-list" markdown="1">
+
+<div class="feature-row" markdown="1">
+
+📷 **写真・PDF からの地図取り込み**　カメラ撮影、写真ライブラリ、ファイルアプリのいずれにも対応
+
+</div>
+
+<div class="feature-row" markdown="1">
+
+📍 **高度な位置合わせ**　相似変換／アフィン／射影変換／TPS（薄板スプライン）を地図に合わせて自動選択
+
+</div>
+
+<div class="feature-row feature-markers" markdown="1">
+
+<span class="marker-icons">
+<img src="{{ site.baseurl }}/assets/img/marker-goal.png" alt="集合場所" class="marker-icon">
+<img src="{{ site.baseurl }}/assets/img/marker-star.png" alt="お気に入り" class="marker-icon">
+<img src="{{ site.baseurl }}/assets/img/marker-warning.png" alt="注意ポイント" class="marker-icon">
+</span>
+**目印ピン**　集合場所・お気に入り・注意ポイントの 3 種類で大事な場所を管理
+
+</div>
+
+<div class="feature-row" markdown="1">
+
+👨‍👩‍👧 **iCloud で家族・友人と共有**　同じ紙マップの上に、みんなの現在地をリアルタイム表示
+
+</div>
+
+<div class="feature-row" markdown="1">
+
+🧭 **コンパス対応**　地図の向きに合わせて方位を表示
+
+</div>
+
+<div class="feature-row" markdown="1">
+
+🔋 **電池節約**　送信間隔を細かく調整可能
+
+</div>
+
+</div>
 
 ---
 
 ## 共有パスについて
 
+<img src="{{ site.baseurl }}/assets/img/share-hero.png" alt="" class="block-illust">
+
 家族・友人と地図と現在地を共有したいときは「共有パス」をご購入ください。
-**共有する側だけが料金をお支払いいただけば、招待された相手は無料で参加できます**（owner-pays）。
+**共有する側だけが料金をお支払いいただければ、招待された相手は無料で参加できます**（owner-pays）。
 
 | パス | 料金 | 内容 |
 |---|---|---|
@@ -110,7 +162,11 @@ title: 紙マップでどこ？
 
 <div class="appstore-card" markdown="1">
 
-[App Store でダウンロード](https://apps.apple.com/jp/app/id6779239045)
+<img src="{{ site.baseurl }}/assets/img/app-icon.png" alt="紙マップでどこ？ アイコン" class="appstore-icon">
+
+<a href="https://apps.apple.com/jp/app/id6779239045" class="appstore-link">
+<img src="{{ site.baseurl }}/assets/img/appstore-badge-ja.svg" alt="App Store でダウンロード" class="appstore-badge">
+</a>
 
 </div>
 
@@ -122,8 +178,14 @@ title: 紙マップでどこ？
 - [プライバシーポリシー]({{ site.baseurl }}/privacy.html)
 - [お問い合わせ（メール）](mailto:kamidoko@biz.nifty.jp?subject=%E7%B4%99%E3%83%9E%E3%83%83%E3%83%97%E3%81%A7%E3%81%A9%E3%81%93%EF%BC%9F%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B)
 
+<div class="closing-message" markdown="1">
+
+家族のおでかけが、ちょっと楽になりますように。
+
+</div>
+
 <div class="footer-meta" markdown="1">
 
-最終更新: 2026-06-22
+最終更新: 2026-06-25
 
 </div>
