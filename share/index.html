@@ -147,6 +147,13 @@
   </div>
 
 <script>
+// 古いタブが残ったまま新しい招待リンク (#u=... が違うだけの同一 URL) を開くと、
+// ブラウザは fragment 変更ではページを再読込しないため、下の IIFE が走り直さず
+// 「古い招待 URL を掴んだまま」になる (2026-07-01 発見: 手動タップで古い URL が開き
+// 『この共有はすでに終了しています』になる)。hashchange で強制リロードして
+// 新しい fragment を初回ロードと同じ経路で処理し直す。
+window.addEventListener('hashchange', function() { location.reload(); });
+
 (function() {
   // URL fragment (`#u=...&n=...`) から取り出す。fragment はサーバへ送信されない (プライバシー)。
   function parseHash() {
