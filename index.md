@@ -1,6 +1,12 @@
 ---
 layout: default
-title: 紙マップでどこ？
+title: 紙マップでどこ？ — 紙の地図に、GPSで「いまここ」
+description: 公園・観光地・キャンプの紙マップに、iPhoneの現在地と家族の場所を重ねて歩けるアプリ。作成・現在地表示は無料。
+image: /assets/img/paywall-hero.jpg
+twitter:
+  card: summary_large_image
+seo:
+  name: 紙マップでどこ？
 ---
 
 <div class="landing-page" markdown="1">
@@ -11,7 +17,7 @@ title: 紙マップでどこ？
 
 <h1>紙マップでどこ？</h1>
 
-<p class="hero-tagline">紙マップに、GPSで「いまここ」。<br>家族の場所も、ひと目でわかる。</p>
+<p class="hero-tagline">紙マップに、GPSで「いまここ」。<br>離れた家族の場所も、同じ地図に。</p>
 
 <p class="hero-lead">入口でもらった園内マップ、観光パンフレット、キャンプ場の案内図。紙の見やすさはそのままに、iPhone の現在地・進行方向・目印を重ねて歩けます。</p>
 
@@ -23,14 +29,14 @@ title: 紙マップでどこ？
 </div>
 
 <div class="hero-points" aria-label="主な特徴">
-<span>マップ作成・現在地表示は無料</span>
-<span>共有参加は無料</span>
-<span>現在地表示は通信なしでも動作</span>
+<span>マップ作成・現在地表示が無料</span>
+<span>目印ピンも無料</span>
+<span>共有に招待された人は無料で参加</span>
 </div>
 </div>
 
 <div class="hero-visual">
-<img src="{{ site.baseurl }}/assets/img/paywall-hero.jpg" alt="紙マップとiPhoneの上に現在地ピンが表示されるイラスト">
+<img src="{{ site.baseurl }}/assets/img/screenshot-1.jpg" alt="紙マップ上に現在地ドットとコンパスが表示された実機画面">
 </div>
 </section>
 
@@ -67,7 +73,7 @@ title: 紙マップでどこ？
 
 </section>
 
-<section markdown="1">
+<section class="band-cream" markdown="1">
 
 ## 紙どこができること
 
@@ -153,7 +159,7 @@ Google Maps や Apple Maps では表示できない、テーマパークの園�
 <div class="step-card" markdown="1">
 
 <span class="step-num">1</span>
-<img src="{{ site.baseurl }}/assets/img/library-header.jpg" alt="" class="step-illust">
+<img src="{{ site.baseurl }}/assets/img/screenshot-3.jpg" alt="" class="step-illust">
 
 ### 地図を取り込む
 紙マップをカメラで撮るか、写真・PDFから選びます。紙は平らにして、なるべく真上から撮るのがコツ。
@@ -165,8 +171,8 @@ Google Maps や Apple Maps では表示できない、テーマパークの園�
 <span class="step-num">2</span>
 <img src="{{ site.baseurl }}/assets/img/calib-tips-hero.jpg" alt="" class="step-illust">
 
-### 3点以上を登録
-現地で立っている場所を、地図上の同じ場所にタップして登録。入口や分岐など、離れた目印が向いています。
+### 現在地を3点以上登録
+入口・分岐・特徴的な建物など、地図上で分かりやすい場所に立ち、同じ地点をタップ。3点はできるだけ離すと、地図全体がきれいに合います。
 
 </div>
 
@@ -184,7 +190,7 @@ Google Maps や Apple Maps では表示できない、テーマパークの園�
 
 </section>
 
-<section markdown="1">
+<section class="band-mint" markdown="1">
 
 ## こんなおでかけに
 
@@ -199,8 +205,8 @@ Google Maps や Apple Maps では表示できない、テーマパークの園�
 
 <div class="scene-card" markdown="1">
 
-### 観光地・古地図さんぽ
-散策マップや城下町の絵地図を、そのまま歩く地図に。
+### 観光地・城下町さんぽ
+観光案内図や城下町の絵地図を、そのまま歩ける地図に。
 
 </div>
 
@@ -230,7 +236,7 @@ Google Maps や Apple Maps では表示できない、テーマパークの園�
 マップ作成、現在地表示、目印ピンは無料です。家族や友人とリアルタイム共有を始める人だけが共有パスを購入します。招待された相手は無料で参加できます。
 
   </div>
-  <img src="{{ site.baseurl }}/assets/img/share-hero.jpg" alt="家族や友人の位置が同じ紙マップに表示されるイラスト" class="share-illust">
+  <img src="{{ site.baseurl }}/assets/img/screenshot-2.jpg" alt="家族の現在地が同じ紙マップに表示された実機画面" class="share-illust">
 </section>
 
 <div class="plan-grid" markdown="1">
@@ -247,7 +253,7 @@ Google Maps や Apple Maps では表示できない、テーマパークの園�
 
 ### 24時間共有パス
 <p class="plan-price">¥300</p>
-1日のおでかけやイベント向け。買い切りで、自動更新はありません。
+1日のおでかけやイベントに。家族や友人と位置・目印を24時間共有できます。買い切りで自動更新はありません。
 
 </div>
 
@@ -261,7 +267,7 @@ Google Maps や Apple Maps では表示できない、テーマパークの園�
 
 </div>
 
-<section markdown="1">
+<section class="band-cream" markdown="1">
 
 ## 安心して使うために
 
@@ -296,7 +302,7 @@ GPS を使うため、空の見える屋外施設に向いています。屋内�
 
 ## まずは無料で、紙マップを歩いてみる
 
-<p>マップ作成と現在地表示は無料です。次のおでかけの前に、手元の紙マップや案内図で試せます。</p>
+<p>マップ作成も現在地表示も、ずっと無料。次のおでかけの前に、手元の紙マップや案内図で試せます。</p>
 
 <div class="appstore-card" markdown="1">
 

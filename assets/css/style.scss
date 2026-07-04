@@ -30,6 +30,7 @@
 
 body {
   background: #FBF6E8;
+  font-family: "Hiragino Maru Gothic ProN", "Hiragino Maru Gothic Pro", "Hiragino Sans", "YuGothic", "Yu Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 // =============================================================================
@@ -118,6 +119,8 @@ h3 + p {
   --blue: #2F75BC;
   --blue-soft: #E6F1FB;
   color: var(--ink);
+  font-family: "Hiragino Maru Gothic ProN", "Hiragino Maru Gothic Pro", "ヒラギノ丸ゴ ProN W4", "Hiragino Sans", "YuGothic", "Yu Gothic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0.01em;
 
   h1,
   h2,
@@ -215,7 +218,13 @@ h3 + p {
     color: var(--orange);
     font-weight: 800;
     text-decoration: none;
-    border-bottom: 2px solid rgba(240, 89, 43, 0.28);
+    border: 2px solid rgba(240, 89, 43, 0.28);
+    border-radius: 999px;
+    padding: 12px 20px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .hero-points {
@@ -243,9 +252,12 @@ h3 + p {
     img {
       display: block;
       width: 100%;
-      max-width: 520px;
+      max-width: 320px;
       height: auto;
       margin: 0 auto;
+      border-radius: 22px;
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 12px 30px rgba(74, 58, 44, 0.16);
     }
   }
 }
@@ -253,11 +265,17 @@ h3 + p {
 .problem-band,
 .visual-section,
 .share-section,
-.download-section {
+.download-section,
+.band-cream,
+.band-mint {
   background: var(--card);
   border: 2px solid var(--soft);
   border-radius: 20px;
   padding: clamp(22px, 4vw, 34px);
+}
+
+.band-mint {
+  background: linear-gradient(135deg, #FFFDF8, var(--green-soft));
 }
 
 .problem-grid,
@@ -282,6 +300,12 @@ h3 + p {
   border-radius: 14px;
   padding: 18px 20px;
   box-shadow: 0 3px 12px rgba(74, 58, 44, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(74, 58, 44, 0.10);
+  }
 
   p {
     margin-bottom: 0;
@@ -365,11 +389,21 @@ h3 + p {
   background: linear-gradient(135deg, #FFFDF8, var(--blue-soft));
 }
 
-.wide-illust,
-.share-illust {
+.wide-illust {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.share-illust {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 22px;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 12px 30px rgba(74, 58, 44, 0.16);
 }
 
 .step-grid {
@@ -426,7 +460,7 @@ h3 + p {
   .step-illust {
     background: #FFF8EA;
     border-radius: 12px;
-    height: 150px;
+    height: 180px;
     object-fit: contain;
     padding: 8px;
     width: 100%;
@@ -465,6 +499,10 @@ h3 + p {
 .featured-plan {
   border-color: var(--orange);
   box-shadow: 0 8px 24px rgba(240, 89, 43, 0.13);
+}
+
+.featured-plan:hover {
+  box-shadow: 0 12px 28px rgba(240, 89, 43, 0.18);
 }
 
 .trust-list {
@@ -675,11 +713,24 @@ h3 + p {
 
 .closing-message {
   text-align: center;
-  margin: 40px 0 16px;
-  padding: 20px;
-  font-size: 1.1em;
-  color: #b65406;
-  font-weight: 600;
+  margin: 48px auto 16px;
+  max-width: 560px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, #FFF6E0, #FFF1DF);
+  border: 2px solid #F0D9A8;
+  border-radius: 24px;
+  font-size: clamp(1.05rem, 3vw, 1.3rem);
+  color: #5b4a3a;
+  font-weight: 800;
+  line-height: 1.9;
+  box-shadow: 0 6px 20px rgba(230, 126, 34, 0.08);
+}
+
+.closing-message::before {
+  content: "🍃";
+  display: block;
+  font-size: 1.6rem;
+  margin-bottom: 6px;
 }
 
 // =============================================================================
@@ -785,10 +836,36 @@ table {
   .landing-hero {
     padding: 22px 18px 18px;
 
+    .hero-logo {
+      width: min(180px, 60%);
+      margin-bottom: 12px;
+    }
+
+    .hero-tagline {
+      margin-top: 10px;
+      font-size: 1.18rem;
+      line-height: 1.5;
+    }
+
+    .hero-lead {
+      font-size: 0.96rem;
+      line-height: 1.75;
+      margin-top: 12px;
+      // 長いリードは畳んで CTA をファーストビューへ引き上げる (約3行に制限)
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
     .hero-actions {
       align-items: flex-start;
       flex-direction: column;
       gap: 12px;
+    }
+
+    .hero-actions .secondary-link {
+      width: 100%;
     }
 
     .appstore-badge {
@@ -796,23 +873,38 @@ table {
     }
 
     .hero-points {
+      gap: 6px;
+      margin-top: 14px;
+
       span {
-        width: 100%;
+        width: auto;
+        font-size: 0.78rem;
+        padding: 6px 10px;
       }
     }
   }
 
   .problem-grid,
   .capability-grid,
-  .scene-grid,
   .plan-grid {
     grid-template-columns: 1fr;
+  }
+
+  .scene-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .scene-card {
+    padding: 14px 14px;
   }
 
   .problem-band,
   .visual-section,
   .share-section,
-  .download-section {
+  .download-section,
+  .band-cream,
+  .band-mint {
     border-radius: 16px;
     padding: 20px 16px;
   }
@@ -827,10 +919,29 @@ table {
   }
 
   .step-card .step-illust {
-    height: 132px;
+    height: 160px;
   }
 
   .plan-grid {
     margin-bottom: 38px;
   }
+}
+
+// =============================================================================
+// フッター詳細リンクのタップ領域拡大 (index.md「詳しい情報」の導線)
+// .landing-page 配下に限定 = support.md 等の他ページには波及しない
+// =============================================================================
+
+.landing-page ul li {
+  margin: 6px 0;
+}
+
+.landing-page ul li a {
+  display: inline-block;
+  padding: 10px 4px;
+  min-height: 24px;
+  color: var(--orange);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid rgba(240, 89, 43, 0.25);
 }
