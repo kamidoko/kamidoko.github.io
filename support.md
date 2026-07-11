@@ -10,6 +10,8 @@ title: 紙マップでどこ？ サポート
 iOS アプリ「紙マップでどこ？」をご利用いただきありがとうございます。
 このページでは、よくあるご質問とお問い合わせ先をご案内します。
 
+[English version / 英語版はこちら](/support-en.html)
+
 </div>
 
 <nav class="toc-nav" markdown="1">
