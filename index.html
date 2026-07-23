@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>紙マップでどこ？ — 紙の地図に、GPSで「いまここ」</title>
+<meta name="description" content="公園・観光地・キャンプの紙マップに、iPhoneの現在地と家族の場所を重ねて歩けるアプリ。作成・現在地表示は無料。">
+<meta property="og:title" content="紙マップでどこ？ — 紙の地図に、GPSで「いまここ」">
+<meta property="og:description" content="公園・観光地・キャンプの紙マップに、iPhoneの現在地と家族の場所を重ねて歩けるアプリ。">
+<meta property="og:image" content="https://kamidoko.github.io/assets/img/paywall-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   紙マップでどこ？ LP v2 — クレイジオラマの世界観
+   コンセプト: 「クラフトテーブルの上のジオラマ」
+   - カード枠を使わず、クレイの小物がクリーム紙の上に浮かぶ
+   - ページ自体をひとつの地図に見立て、点線トレイル＋ピンで区切る
+   - 画像の背景クリームとページ地色を揃え、縁をフォグで溶かす
+   ============================================================ */
+:root {
+  --cream: #FCF2DC;        /* 生成画像の背景に合わせた地色 */
+  --cream-air: #FDF7EA;    /* ひと呼吸あかるい帯 */
+  --cocoa: #46362A;
+  --mocha: #82705C;
+  --clay: #E8502F;
+  --clay-deep: #C7401F;
+  --leaf: #7CB342;
+  --leaf-deep: #4F7D29;
+  --sky: #4A90D9;
+  --butter: #E9D6A8;       /* 点線・罫線 */
+  --paper: #FFFBF0;        /* 荷札の紙色 */
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--cocoa);
+  font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  font-weight: 500;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; }
+a { color: var(--clay); }
+h1, h2, h3 { color: var(--cocoa); line-height: 1.45; margin: 0; }
+p { color: var(--mocha); margin: 0; }
+.num { font-family: "Nunito", "Zen Maru Gothic", sans-serif; }
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- スクロール出現 ---------- */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.on { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- クレイ画像の縁をページへ溶かすフォグ ---------- */
+.fog { position: relative; border-radius: 28px; overflow: hidden; }
+.fog img { display: block; width: 100%; }
+.fog::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: inset 0 0 44px 26px var(--cream);
+  pointer-events: none;
+}
+
+/* ---------- トレイル（署名要素）: セクションをつなぐ「地図の道」 ----------
+   S字にカーブする点線の道が次のセクションへ続き、終点にクレイピンが立つ */
+.trail-gap {
+  height: 150px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="150" viewBox="0 0 220 150"><path d="M100 6 C 158 24, 58 52, 102 82" fill="none" stroke="%23DFC68E" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="0.1 16"/><g transform="translate(110 118)"><path d="M0 24 C -9.5 12, -14 4, -14 -6 a14 14 0 1 1 28 0 C 14 4, 9.5 12, 0 24 z" fill="%23E8502F"/><circle cx="0" cy="-6" r="5" fill="%23FFFBF0"/></g></svg>') center / auto 100% no-repeat;
+}
+/* セクション頭の eyebrow: クレイピン + ラベル */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  color: var(--clay-deep); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.16em;
+}
+.eyebrow::before {
+  content: ""; width: 15px; height: 15px; flex: none;
+  background: var(--clay);
+  border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.06);
+}
+.center .eyebrow { justify-content: center; }
+
+/* ---------- トップバー ---------- */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 10px 20px;
+  background: rgba(252, 242, 220, 0.9);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(233, 214, 168, 0.55);
+  transform: translateY(-110%); transition: transform 0.35s ease;
+}
+.topbar.show { transform: none; }
+.topbar img.logo { height: 30px; width: auto; display: block; }
+.topbar .dl {
+  background: var(--clay); color: #fff; text-decoration: none;
+  font-weight: 700; font-size: 0.9rem; border-radius: 999px;
+  padding: 9px 20px; box-shadow: 0 4px 14px rgba(232, 80, 47, 0.32);
+}
+
+/* ---------- ヒーロー ---------- */
+.hero { padding: clamp(48px, 8vw, 88px) 0 0; }
+.hero-grid {
+  display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(300px, 1.08fr);
+  gap: clamp(20px, 4vw, 48px); align-items: center;
+}
+.hero-logo { width: min(200px, 52%); display: block; margin-bottom: 26px; }
+.hero h1 {
+  font-size: clamp(2.0rem, 5.2vw, 3.4rem);
+  font-weight: 900; line-height: 1.42; letter-spacing: 0.03em;
+}
+.hero h1 .accent { color: var(--clay); }
+.hero-lead { margin-top: 20px; font-size: clamp(0.98rem, 2.3vw, 1.1rem); }
+.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 30px; }
+.store-badge { display: inline-block; line-height: 0; border-radius: 10px; box-shadow: 0 10px 26px rgba(70, 54, 42, 0.24); transition: transform 0.2s ease; }
+.store-badge:hover { transform: translateY(-2px); }
+.store-badge img { height: 56px; width: auto; display: block; }
+.ghost-link {
+  color: var(--clay-deep); font-weight: 700; text-decoration: none;
+  border: 2px solid rgba(232, 80, 47, 0.32); border-radius: 999px;
+  padding: 12px 24px; background: rgba(255, 251, 240, 0.6);
+}
+.hero-points { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 26px 0 0; padding: 0; list-style: none; }
+.hero-points li {
+  color: var(--leaf-deep); font-size: 0.88rem; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.hero-points li::before {
+  content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--leaf); flex: none;
+}
+.hero-art { position: relative; }
+.hero-art img { display: block; width: 100%; }
+.hero-art::after {
+  content: ""; position: absolute; inset: 0;
+  box-shadow: inset 0 0 60px 40px var(--cream);
+  pointer-events: none;
+}
+
+/* ---------- 見出しブロック ---------- */
+.center { text-align: center; }
+.head h2 { font-size: clamp(1.5rem, 3.6vw, 2.25rem); font-weight: 900; margin: 14px 0 0; letter-spacing: 0.03em; }
+.head .sub { max-width: 37em; margin: 14px auto 0; }
+.head.left .sub { margin-left: 0; }
+
+/* ---------- 課題（タイポ主導・枠なし） ---------- */
+.pain-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 4vw, 44px); margin-top: 44px; }
+.pain h3 { font-size: 1.1rem; font-weight: 900; }
+.pain h3 em { font-style: normal; color: var(--clay); }
+.pain p { margin-top: 8px; font-size: 0.95rem; }
+.pain { padding-top: 16px; border-top: 4px dotted var(--butter); }
+.answer {
+  margin: 52px auto 0; max-width: 640px; text-align: center;
+  color: var(--leaf-deep); font-weight: 900; font-size: clamp(1.15rem, 3vw, 1.5rem);
+  line-height: 1.8;
+}
+.answer .underline {
+  background: linear-gradient(transparent 68%, rgba(124, 179, 66, 0.28) 68%);
+  padding: 0 2px;
+}
+
+/* ---------- 3ステップ ---------- */
+.step-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3.5vw, 36px); margin-top: 48px; }
+.step { text-align: center; }
+.step .art { position: relative; border-radius: 26px; overflow: hidden; }
+.step .art img { display: block; width: 100%; }
+.step .art::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: inset 0 0 36px 20px var(--cream);
+  pointer-events: none;
+}
+.step-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 18px; }
+.step-no {
+  width: 34px; height: 34px; border-radius: 50%; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--clay); color: #fff; font-weight: 800; font-size: 1.02rem;
+  box-shadow: 0 3px 0 rgba(70, 54, 42, 0.14);
+}
+.step h3 { font-size: 1.14rem; font-weight: 900; }
+.step p { margin-top: 10px; font-size: 0.94rem; text-align: left; }
+
+/* ---------- できること（浮遊グリッド） ---------- */
+.cap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(22px, 3.5vw, 36px) clamp(18px, 3vw, 30px); margin-top: 48px; }
+.cap img {
+  display: block; width: 100%; aspect-ratio: 1; object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0 14px 30px -12px rgba(70, 54, 42, 0.28);
+}
+.cap h3 { font-size: 1.06rem; font-weight: 900; margin-top: 16px; }
+.cap p { margin-top: 6px; font-size: 0.92rem; }
+
+/* ---------- 共有ストーリー ---------- */
+.share-band { background: var(--cream-air); padding: clamp(56px, 8vw, 88px) 0; }
+.split {
+  display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(300px, 1.08fr);
+  gap: clamp(24px, 5vw, 56px); align-items: center;
+}
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 22px 0 0; padding: 0; list-style: none; }
+.badge-row li {
+  color: var(--sky); font-size: 0.88rem; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.badge-row li::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--sky); flex: none; }
+
+/* ---------- 料金（クラフト荷札） ---------- */
+.plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 3vw, 28px); margin-top: 52px; }
+/* 荷札: 形は clip-path。枠線と影は箱に沿ってしまうため、
+   枠=同形の二重ネスト（外=枠色/内=紙色を少し内側に）、影=drop-shadow で荷札の形に落とす */
+.tag { filter: drop-shadow(0 12px 12px rgba(70, 54, 42, 0.16)); transform: rotate(-0.6deg); }
+.tag:nth-child(2) { transform: rotate(0.5deg); }
+.tag:nth-child(3) { transform: rotate(-0.3deg); }
+.tag-skin {
+  height: 100%;
+  clip-path: polygon(22px 0, 100% 0, 100% 100%, 22px 100%, 0 calc(50% + 11px), 0 calc(50% - 11px));
+  background: var(--paper);
+}
+.tag-feat .tag-skin { background: var(--clay); padding: 3.5px; }
+.tag-body {
+  position: relative; height: 100%;
+  clip-path: polygon(22px 0, 100% 0, 100% 100%, 22px 100%, 0 calc(50% + 11px), 0 calc(50% - 11px));
+  background: var(--paper);
+  padding: 26px 24px 24px 46px;
+}
+.tag-body::before { /* 荷札の穴 */
+  content: ""; position: absolute; left: 24px; top: 50%;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--cream); transform: translateY(-50%);
+  box-shadow: inset 0 1px 2px rgba(70, 54, 42, 0.25);
+}
+.tag h3 { font-size: 1.04rem; font-weight: 900; }
+.tag .price { color: var(--clay); font-size: 2.1rem; font-weight: 800; line-height: 1.3; margin-top: 6px; }
+.tag .price small { font-size: 0.95rem; color: var(--mocha); font-weight: 700; }
+.tag p { margin-top: 8px; font-size: 0.9rem; }
+.tag-feat .flag {
+  display: inline-block; margin-bottom: 10px;
+  background: var(--clay); color: #fff; border-radius: 999px;
+  font-size: 0.78rem; font-weight: 700; padding: 4px 14px; white-space: nowrap;
+  box-shadow: 0 3px 8px rgba(232, 80, 47, 0.3);
+}
+.plan-note { text-align: center; margin: 26px auto 0; font-size: 0.92rem; max-width: 42em; }
+
+/* ---------- こんなおでかけに ---------- */
+.scene-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2.6vw, 26px); margin-top: 48px; }
+.scene { text-align: center; }
+.scene img {
+  display: block; width: 100%; border-radius: 22px;
+  box-shadow: 0 12px 26px -12px rgba(70, 54, 42, 0.24);
+}
+.scene h3 { font-size: 1.0rem; font-weight: 900; margin-top: 14px; }
+.scene p { margin-top: 4px; font-size: 0.88rem; }
+
+/* ---------- 安心 ---------- */
+.trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 4vw, 44px); margin-top: 44px; }
+.trust { padding-top: 16px; border-top: 4px dotted var(--butter); }
+.trust h3 { font-size: 1.02rem; font-weight: 900; }
+.trust p { margin-top: 8px; font-size: 0.92rem; }
+
+/* ---------- 最終CTA ---------- */
+.final { text-align: center; padding: clamp(64px, 10vw, 110px) 0 clamp(56px, 8vw, 88px); }
+.final h2 { font-size: clamp(1.7rem, 4.4vw, 2.5rem); font-weight: 900; line-height: 1.6; }
+.final .lead { max-width: 34em; margin: 16px auto 0; }
+.cta-row { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 36px; }
+.cta-row .icon {
+  width: 92px; height: 92px; border-radius: 21px;
+  box-shadow: 0 14px 30px -10px rgba(70, 54, 42, 0.32);
+}
+.closing { margin-top: 56px; font-weight: 700; color: var(--mocha); }
+.closing::before { content: "🍃"; display: block; font-size: 1.4rem; margin-bottom: 6px; }
+
+/* ---------- フッター ---------- */
+footer { background: var(--cream-air); border-top: 1px solid rgba(233, 214, 168, 0.6); padding: 36px 0 46px; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 8px 28px; justify-content: center; padding: 0; margin: 0 0 14px; list-style: none; }
+.foot-links a { font-weight: 700; font-size: 0.94rem; text-decoration: none; border-bottom: 2px dotted rgba(232, 80, 47, 0.4); padding: 6px 2px; }
+.copyright { text-align: center; font-size: 0.8rem; color: #A6957F; }
+
+/* ---------- セクション余白 ---------- */
+section { padding: 0; scroll-margin-top: 64px; }
+.pad { padding: clamp(30px, 5vw, 48px) 0; }
+
+/* ---------- レスポンシブ ---------- */
+@media (max-width: 900px) {
+  .pain-grid, .step-grid, .plan-grid, .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cap-grid, .scene-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-grid, .split { grid-template-columns: 1fr; }
+  .split .fog { order: -1; }
+  .pain-grid > :last-child, .step-grid > :last-child, .plan-grid > :last-child, .trust-grid > :last-child {
+    grid-column: 1 / -1; width: 100%; max-width: 500px; justify-self: center;
+  }
+}
+@media (max-width: 600px) {
+  .trail-gap { height: 110px; }
+  .hero { padding-top: 40px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .ghost-link { text-align: center; }
+  .store-badge { align-self: center; }
+  .pain-grid, .step-grid, .plan-grid, .trust-grid, .cap-grid { grid-template-columns: 1fr; }
+  .scene-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tag, .tag:nth-child(2), .tag:nth-child(3) { transform: none; }
+  .plan-grid .tag-feat { order: -1; }
+  .step p { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- トップバー（スクロール後に出現） -->
+<div class="topbar" id="topbar">
+  <img class="logo" src="/assets/img/applogo.png" alt="紙マップでどこ？">
+  <a class="dl" href="https://apps.apple.com/jp/app/id6779239045">App Store で入手</a>
+</div>
+
+<!-- ヒーロー -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <img class="hero-logo" src="/assets/img/applogo.png" alt="紙マップでどこ？">
+      <h1>紙の地図に、<br>GPSで<span class="accent" style="white-space: nowrap;">「いまここ」。</span></h1>
+      <p class="hero-lead">入口でもらった園内マップ、観光パンフレット、キャンプ場の案内図。紙の見やすさはそのままに、iPhone の現在地・進行方向・家族の場所を重ねて歩けます。</p>
+      <div class="hero-actions">
+        <a class="store-badge" href="https://apps.apple.com/jp/app/id6779239045">
+          <img src="/assets/img/appstore-badge-ja.svg" alt="App Store でダウンロード">
+        </a>
+        <a class="ghost-link" href="#how">使い方を見る</a>
+      </div>
+      <ul class="hero-points">
+        <li>マップ作成・現在地表示が無料</li>
+        <li>目印ピンも無料</li>
+        <li>招待された人は無料で参加</li>
+      </ul>
+    </div>
+    <div class="hero-art reveal">
+      <img src="/assets/img/v3-hero.jpg" alt="紙の地図のジオラマの上に、にっこり笑う現在地ピンが立っているクレイアート">
+    </div>
+  </div>
+</header>
+
+<div class="trail-gap" aria-hidden="true"></div>
+
+<!-- 課題 → 解決 -->
+<section>
+  <div class="wrap">
+    <div class="head center reveal">
+      <span class="eyebrow">よくある、こまりごと</span>
+      <h2>紙の地図は好き。でも、いまどこ？</h2>
+    </div>
+    <div class="pain-grid">
+      <div class="pain reveal">
+        <h3>紙マップは<em>見やすい</em></h3>
+        <p>トイレも売店もアトラクションも、現地の絵で大きく描かれているから分かりやすい。</p>
+      </div>
+      <div class="pain reveal">
+        <h3>でも<em>現在地が分からない</em></h3>
+        <p>地図をくるくる回して、看板を探して、結局「ここどこだっけ？」となりがち。</p>
+      </div>
+      <div class="pain reveal">
+        <h3><em>合流の連絡</em>が増える</h3>
+        <p>家族や友人と別行動すると、「いまどこ？」のやりとりだけで時間を使ってしまう。</p>
+      </div>
+    </div>
+    <p class="answer reveal">だったら、<span class="underline">いつもの紙マップに現在地が出ればいい。</span></p>
+  </div>
+</section>
+
+<div class="trail-gap" aria-hidden="true"></div>
+
+<!-- 3ステップ -->
+<section id="how">
+  <div class="wrap">
+    <div class="head center reveal">
+      <span class="eyebrow">つかいかた</span>
+      <h2>使い方は、3ステップ</h2>
+      <p class="sub">むずかしい設定はありません。現地に着いてからでも間に合います。</p>
+    </div>
+    <div class="step-grid">
+      <div class="step reveal">
+        <div class="art"><img src="/assets/img/v3-step1.jpg" alt="スマートフォンで紙の地図を撮影しているクレイアート"></div>
+        <div class="step-head"><span class="step-no num">1</span><h3>地図を取り込む</h3></div>
+        <p>紙マップをカメラで撮るか、写真・PDFから選びます。紙は平らにして、なるべく真上から撮るのがコツ。</p>
+      </div>
+      <div class="step reveal">
+        <div class="art"><img src="/assets/img/v3-step2.jpg" alt="紙の地図にピンを置く指先のクレイアート"></div>
+        <div class="step-head"><span class="step-no num">2</span><h3>現在地を3点以上登録</h3></div>
+        <p>入口・分岐・特徴的な建物など、分かりやすい場所に立って同じ地点をタップ。3点はできるだけ離すと、地図全体がきれいに合います。</p>
+      </div>
+      <div class="step reveal">
+        <div class="art"><img src="/assets/img/v3-step3.jpg" alt="地図の小道を歩く現在地ピンのキャラクターのクレイアート"></div>
+        <div class="step-head"><span class="step-no num">3</span><h3>あとは歩くだけ</h3></div>
+        <p>紙マップの上を現在地が動きます。必要なときだけ、家族や友人を招待して一緒に使えます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trail-gap" aria-hidden="true"></div>
+
+<!-- できること -->
+<section>
+  <div class="wrap">
+    <div class="head center reveal">
+      <span class="eyebrow">紙どこができること</span>
+      <h2>「現地でもらう地図」を、歩ける地図に</h2>
+      <p class="sub">Google マップにも Apple マップにも載っていない、園内マップやイラスト案内図のためのアプリです。</p>
+    </div>
+    <div class="cap-grid">
+      <div class="cap reveal">
+        <img src="/assets/img/feature-import.jpg" alt="紙マップをiPhoneで取り込むイラスト" loading="lazy">
+        <h3>紙マップを取り込む</h3>
+        <p>カメラ撮影、写真ライブラリ、PDF、ファイルアプリから。現地でもらった地図をそのまま使えます。</p>
+      </div>
+      <div class="cap reveal">
+        <img src="/assets/img/feature-calibration.jpg" alt="紙マップ上で3点以上を位置合わせするイラスト" loading="lazy">
+        <h3>現地で位置合わせ</h3>
+        <p>分かりやすい場所を3点以上登録。歪んだ手描き地図にも自動で補正方式を選んで合わせます。</p>
+      </div>
+      <div class="cap reveal">
+        <img src="/assets/img/feature-location.jpg" alt="紙マップ上に現在地と向きを表示するイラスト" loading="lazy">
+        <h3>現在地と向きを表示</h3>
+        <p>青い現在地とコンパスで、紙マップ上の「いまここ」と進行方向が分かります。誤差の範囲も表示します。</p>
+      </div>
+      <div class="cap reveal">
+        <img src="/assets/img/feature-markers.jpg" alt="集合場所・お気に入り・注意ポイントの目印ピンを置くイラスト" loading="lazy">
+        <h3>目印ピンを置く</h3>
+        <p>集合場所・お気に入り・注意ポイントを地図上に保存。共有中ならメンバー全員にも反映されます。</p>
+      </div>
+      <div class="cap reveal">
+        <img src="/assets/img/feature-share.jpg" alt="家族や友人と同じ紙マップを共有するイラスト" loading="lazy">
+        <h3>家族・友人と共有</h3>
+        <p>iCloud で同じ紙マップ・現在地・目印をリアルタイム共有。招待はリンクやQRコードで送れます。</p>
+      </div>
+      <div class="cap reveal">
+        <img src="/assets/img/feature-privacy.jpg" alt="位置共有を自分で止められる安心感を表すイラスト" loading="lazy">
+        <h3>自分で止められる共有</h3>
+        <p>共有は招待した相手だけ。位置共有はいつでも停止でき、24時間を過ぎた位置は表示されません。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trail-gap" aria-hidden="true"></div>
+
+<!-- 共有ストーリー -->
+<section class="share-band">
+  <div class="wrap split">
+    <div class="reveal">
+      <div class="head left">
+        <span class="eyebrow">家族・友人と</span>
+        <h2>「いまどこ？」を、<br>同じ地図で分かり合える</h2>
+      </div>
+      <p style="margin-top: 18px;">別行動しても、みんなの現在地が同じ紙マップの上に。集合場所のピンを立てれば、「あとどれくらい？」の連絡も要らなくなります。</p>
+      <p style="margin-top: 12px;">マラソン応援なら、コース地図の上でランナーの位置を追いかけられます。</p>
+      <ul class="badge-row">
+        <li>現在地をリアルタイム共有</li>
+        <li>集合場所ピンを全員に</li>
+        <li>招待はリンクかQRで</li>
+      </ul>
+    </div>
+    <div class="fog reveal">
+      <img src="/assets/img/v3-share.jpg" alt="1枚の地図の上で、色違いの現在地ピンたちが点線でつながっているクレイアート" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<div class="trail-gap" aria-hidden="true"></div>
+
+<!-- 料金 -->
+<section>
+  <div class="wrap">
+    <div class="head center reveal">
+      <span class="eyebrow">りょうきん</span>
+      <h2>共有パスは、代表者だけでOK</h2>
+      <p class="sub">マップ作成・現在地表示・目印ピンは無料。リアルタイム共有を始める人だけが共有パスを購入します。招待された相手は無料で参加できます。</p>
+    </div>
+    <div class="plan-grid">
+      <div class="tag reveal">
+        <div class="tag-skin"><div class="tag-body">
+          <h3>30分お試し</h3>
+          <p class="price num">¥0</p>
+          <p>共有機能を初回30分だけ体験できます。自動課金はありません。</p>
+        </div></div>
+      </div>
+      <div class="tag tag-feat reveal">
+        <div class="tag-skin"><div class="tag-body">
+          <span class="flag">1日のおでかけに</span>
+          <h3>24時間共有パス</h3>
+          <p class="price num">¥300</p>
+          <p>家族や友人と位置・目印を24時間共有。買い切りで自動更新はありません。</p>
+        </div></div>
+      </div>
+      <div class="tag reveal">
+        <div class="tag-skin"><div class="tag-body">
+          <h3>月額おでかけパス</h3>
+          <p class="price num">¥600<small> / 月</small></p>
+          <p>定期的に家族で出かける方向け。App Store からいつでも解約できます。</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trail-gap" aria-hidden="true"></div>
+
+<!-- こんなおでかけに -->
+<section>
+  <div class="wrap">
+    <div class="head center reveal">
+      <span class="eyebrow">こんなおでかけに</span>
+      <h2>紙の地図があるところ、ぜんぶ</h2>
+    </div>
+    <div class="scene-grid">
+      <div class="scene reveal">
+        <img src="/assets/img/v3-scene-park.jpg" alt="観覧車のクレイアート" loading="lazy">
+        <h3>テーマパーク・動物園</h3>
+        <p>園内マップを見ながら、次のアトラクションへ。</p>
+      </div>
+      <div class="scene reveal">
+        <img src="/assets/img/v3-scene-castle.jpg" alt="お城のクレイアート" loading="lazy">
+        <h3>観光地・城下町さんぽ</h3>
+        <p>観光案内図や絵地図を、そのまま歩ける地図に。</p>
+      </div>
+      <div class="scene reveal">
+        <img src="/assets/img/v3-scene-camp.jpg" alt="テントと焚き火のクレイアート" loading="lazy">
+        <h3>キャンプ場・公園</h3>
+        <p>広い敷地で、サイト・遊具・集合場所を確認。</p>
+      </div>
+      <div class="scene reveal">
+        <img src="/assets/img/v3-scene-festival.jpg" alt="お祭りの旗と屋台のクレイアート" loading="lazy">
+        <h3>フェス・大型イベント</h3>
+        <p>屋台やステージ、待ち合わせ場所を会場図で共有。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trail-gap" aria-hidden="true"></div>
+
+<!-- 安心 -->
+<section>
+  <div class="wrap">
+    <div class="head center reveal">
+      <span class="eyebrow">あんしんのために</span>
+      <h2>ちゃんと伝えておきたいこと</h2>
+    </div>
+    <div class="trust-grid">
+      <div class="trust reveal">
+        <h3>屋外向けです</h3>
+        <p>GPS を使うため、空の見える屋外施設に向いています。屋内や高層ビル街では位置が乱れることがあります。</p>
+      </div>
+      <div class="trust reveal">
+        <h3>共有には iCloud が必要</h3>
+        <p>共有機能は iCloud を使います。位置情報は招待した相手とだけ共有されます。</p>
+      </div>
+      <div class="trust reveal">
+        <h3>精度は地図とGPSに依存</h3>
+        <p>紙マップの縮尺が場所ごとに大きく変わる場合や、GPS精度が悪い場所ではずれることがあります。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 最終CTA -->
+<section class="final">
+  <div class="wrap">
+    <h2 class="reveal">まずは無料で、<br>紙マップを歩いてみる</h2>
+    <p class="lead reveal">マップ作成も現在地表示も、ずっと無料。次のおでかけの前に、手元の紙マップや案内図で試せます。</p>
+    <div class="cta-row reveal">
+      <img class="icon" src="/assets/img/app-icon.png" alt="紙マップでどこ？ アイコン">
+      <a class="store-badge" href="https://apps.apple.com/jp/app/id6779239045">
+        <img src="/assets/img/appstore-badge-ja.svg" alt="App Store でダウンロード">
+      </a>
+    </div>
+    <p class="closing reveal">家族のおでかけが、ちょっと楽になりますように。</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <ul class="foot-links">
+      <li><a href="/support.html">サポート・よくあるご質問</a></li>
+      <li><a href="/privacy.html">プライバシーポリシー</a></li>
+      <li><a href="mailto:kamidoko@biz.nifty.jp?subject=%E7%B4%99%E3%83%9E%E3%83%83%E3%83%97%E3%81%A7%E3%81%A9%E3%81%93%EF%BC%9F%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">お問い合わせ（メール）</a></li>
+    </ul>
+    <p class="copyright">© 2026 紙マップでどこ？</p>
+  </div>
+</footer>
+
+<script>
+// トップバー: ヒーローを過ぎたら表示
+var topbar = document.getElementById('topbar');
+var hero = document.querySelector('.hero');
+window.addEventListener('scroll', function () {
+  topbar.classList.toggle('show', window.scrollY > hero.offsetHeight * 0.7);
+}, { passive: true });
+
+// スクロール出現。IntersectionObserver が発火しない環境でも
+// 取り残しが出ないよう、scroll イベントの rect 判定を併用する。
+var pending = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+function revealCheck() {
+  if (!pending.length) { return; }
+  var vh = window.innerHeight;
+  pending = pending.filter(function (el) {
+    var r = el.getBoundingClientRect();
+    if (r.top < vh * 0.95 && r.bottom > 0) { el.classList.add('on'); return false; }
+    return true;
+  });
+}
+if ('IntersectionObserver' in window) {
+  var io = new IntersectionObserver(function () { revealCheck(); }, { threshold: 0.05 });
+  pending.forEach(function (el) { io.observe(el); });
+}
+var ticking = false;
+window.addEventListener('scroll', function () {
+  if (ticking) { return; }
+  ticking = true;
+  requestAnimationFrame(function () { revealCheck(); ticking = false; });
+}, { passive: true });
+revealCheck();
+</script>
+
+</body>
+</html>
