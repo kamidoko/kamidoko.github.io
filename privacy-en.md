@@ -1,6 +1,6 @@
 ---
 title: Paper Map GPS — Privacy Policy
-description: Privacy policy for Paper Map GPS (紙マップでどこ？), the iOS app that overlays your live GPS location on paper maps.
+description: Privacy policy for Paper Map GPS (紙どこ), the iOS app that overlays your live GPS location on paper maps.
 ---
 
 # Paper Map GPS — Privacy Policy
@@ -10,7 +10,7 @@ description: Privacy policy for Paper Map GPS (紙マップでどこ？), the iO
 
 [日本語版はこちら / Japanese version](/privacy.html)
 
-Paper Map GPS ("the App"; Japanese name 紙マップでどこ？) respects your privacy and handles personal information with the utmost care. This policy explains what information the App handles and how it is used.
+Paper Map GPS ("the App"; Japanese name 紙どこ) respects your privacy and handles personal information with the utmost care. This policy explains what information the App handles and how it is used.
 
 The App overlays your device's GPS location on top of paper guide maps, information boards, and illustrated maps. You can also share a map with friends and see each other's locations in real time.
 
@@ -18,7 +18,7 @@ The App overlays your device's GPS location on top of paper guide maps, informat
 
 ## 1. Provider
 
-- **App name**: Paper Map GPS (紙マップでどこ？)
+- **App name**: Paper Map GPS (紙どこ)
 - **Provider**: Usui Yoshihiro
 - **Contact**: kamidoko@biz.nifty.jp
 

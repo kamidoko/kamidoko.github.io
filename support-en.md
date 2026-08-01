@@ -1,14 +1,14 @@
 ---
 layout: default
 title: Paper Map GPS — Support
-description: Support and FAQ for Paper Map GPS (紙マップでどこ？), the iOS app that overlays your live GPS location on paper maps.
+description: Support and FAQ for Paper Map GPS (紙どこ), the iOS app that overlays your live GPS location on paper maps.
 ---
 
 <div class="hero-card" markdown="1">
 
 # Paper Map GPS — Support
 
-Thank you for using Paper Map GPS (Japanese name: 紙マップでどこ？).
+Thank you for using Paper Map GPS (Japanese name: 紙どこ).
 This page covers frequently asked questions and how to contact us.
 
 [日本語版はこちら / Japanese version](/support.html)
